@@ -9,25 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var Task = (function () {
-    function Task(title, completed) {
-        this.title = title;
-        this.completed = completed;
-    }
-    return Task;
-}());
-exports.Task = Task;
+var providers_1 = require('./modules/storage/providers');
 var ToDoComponent = (function () {
     function ToDoComponent() {
         this.title = '';
-        this.tasks = [];
+        this.provider = new providers_1.StorageProvider('LocalStorageProvider');
     }
     /**
      * Adds task object to storage
      * @param event
      */
     ToDoComponent.prototype.addTask = function (event) {
-        this.tasks.push(new Task(this.title, false));
+        this.provider.add({ title: this.title, completed: false });
         this.title = '';
         event.preventDefault();
     };
@@ -36,7 +29,14 @@ var ToDoComponent = (function () {
      * @param index
      */
     ToDoComponent.prototype.deleteTask = function (index) {
-        this.tasks.splice(index, 1);
+        this.provider.delete(index);
+    };
+    /**
+     * Marks task as read
+     * @param index
+     */
+    ToDoComponent.prototype.toggleCompleted = function (index) {
+        this.provider.toggleCompleted(index);
     };
     ToDoComponent = __decorate([
         core_1.Component({

@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-
-export class Task {
-    constructor(public title: string, public completed: boolean) {}
-}
+import { StorageProvider } from './modules/storage/providers';
 
 @Component({
     selector: 'my-app',
@@ -11,11 +8,11 @@ export class Task {
 
 export class ToDoComponent {
     title: string;
-    tasks: any;
+    provider: any;
 
     constructor() {
         this.title = '';
-        this.tasks = [];
+        this.provider = new StorageProvider('LocalStorageProvider');
     }
 
     /**
@@ -23,7 +20,7 @@ export class ToDoComponent {
      * @param event
      */
     addTask(event) {
-        this.tasks.push(new Task(this.title, false));
+        this.provider.add({title: this.title, completed:false});
         this.title = '';
         event.preventDefault();
     }
@@ -33,6 +30,14 @@ export class ToDoComponent {
      * @param index
      */
     deleteTask(index) {
-        this.tasks.splice(index, 1);
+       this.provider.delete(index);
+    }
+
+    /**
+     * Marks task as read
+     * @param index
+     */
+    toggleCompleted(index) {
+        this.provider.toggleCompleted(index);
     }
 }
