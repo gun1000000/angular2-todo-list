@@ -12,8 +12,9 @@ h2, h3 {
 body {
     margin: 2em;
 }
+[hidden] { display: none !important;}
 .task-list li {list-style-type: none;}
 .task-list input {float: left;}
 .task-list .task-title {padding-left: 10px;}
-.task-list .checked {text-decoration: line-through;}
+.task-list input.checked {text-decoration: line-through;}
 .task-list .delete-task {color:red;}

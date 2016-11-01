@@ -8,13 +8,17 @@
     <button type="submit" class="btn btn-default" [disabled]="title===''">Add</button>
     </form>
 </div>
-<div class="col-md-4">
-    <ul class="task-list">
-        <li *ngFor="let task of provider.getAll(); let i=index"  class="form-group">
-              <input type="checkbox" class="checkbox" [(ngModel)]="task.completed" (click)="toggleCompleted(i)" />
-              <span class="task-title" [ngClass]="{'checked': task.completed}">{{ task.title }}</span>
-              <span class="delete-task" (click)="deleteTask(i)">[X]</span>
-        </li>
-    </ul>
+<div class="col-md-4 task-list">
+        <div class="form-group row" *ngFor="let task of logic.getAll() | orderBy : ['title']">
+            <div class="col-md-1">
+              <input type="checkbox" class="form-control" [(ngModel)]="task.completed" (click)="toggleCompleted(task.id)" />
+                </div>
+            <div class="col-md-4">
+              <input type="text" class="task-title form-control" [ngClass]="{'checked': task.completed}" [(ngModel)]="task.title"  (ngModelChange)="editTask(task.id, task.title)" />
+                </div>
+            <div class="col-md-2">
+              <span type="submit" class="btn btn-danger" (click)="deleteTask(task.id)">Delete</span>
+                </div>
+        </div>
 </div>
 

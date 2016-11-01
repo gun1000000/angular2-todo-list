@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
-import { StorageProvider } from './modules/storage/providers';
-
+import { Component,Pipe } from '@angular/core';
+import { Task } from './entities/task';
+import { TaskLogic } from './logic/task-logic';
 @Component({
     selector: 'my-app',
-    templateUrl: 'app/templates/todo-form.html'
+    templateUrl: 'app/templates/todo-form.html',
 })
 
 export class ToDoComponent {
     title: string;
-    provider: any;
+    edit: boolean;
+    logic: TaskLogic;
 
     constructor() {
         this.title = '';
-        this.provider = new StorageProvider('LocalStorageProvider');
+        this.edit = false;
+        this.logic = new TaskLogic('LocalStorageProvider');
     }
 
     /**
@@ -20,24 +22,33 @@ export class ToDoComponent {
      * @param event
      */
     addTask(event) {
-        this.provider.add({title: this.title, completed:false});
+        this.logic.add(this.title, false);
         this.title = '';
         event.preventDefault();
     }
 
     /**
-     * Removes task object from storage
-     * @param index
+     * Edit task title
+     * @param id
+     * @param title
      */
-    deleteTask(index) {
-       this.provider.delete(index);
+    editTask(id, title) {
+       this.logic.edit(id, title);
     }
 
     /**
      * Marks task as read
-     * @param index
+     * @param id
      */
-    toggleCompleted(index) {
-        this.provider.toggleCompleted(index);
+    toggleCompleted(id) {
+        this.logic.toggleCompleted(id);
+    }
+
+    /**
+     * Removes task object from storage
+     * @param id
+     */
+    deleteTask(id) {
+       this.logic.delete(id);
     }
 }

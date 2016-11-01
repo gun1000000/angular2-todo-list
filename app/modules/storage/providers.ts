@@ -1,65 +1,47 @@
-import { Task } from '../../entities/task';
+import {Task} from "../../entities/task";
 /**
  * Created by artem on 31.10.2016.
  */
 namespace Providers {
     export interface StorageProviderInterface {
-        get(): Object[];
-        set(tasks: Object[]): void;
+        get(name: string): any;
+        set(name: string, value: string): void;
     }
     export class LocalStorageProvider implements StorageProviderInterface {
-        get(): Object[] {
-            var tasks = localStorage.getItem('tasks');
-            if (!tasks){
-                tasks = '[]';
-            }
-            return JSON.parse(tasks);
+        get(name) {
+            return localStorage.getItem(name);
         }
-        set(tasks: Object[]): void {
-            return localStorage.setItem('tasks', JSON.stringify(tasks));
+        set(name, value) {
+            return localStorage.setItem(name, value);
         }
     }
 }
 
-export class StorageProvider {
+export class AbstractStorageProvider {
+    tasksFieldId: string = 'tasks';
     storage: Providers.StorageProviderInterface;
-    tasks: Task[];
     constructor(private storageProviderName) {
         if (typeof Providers[storageProviderName] !== 'undefined') {
             this.storage = new Providers[storageProviderName]();
         } else {
             throw('Wrong storage name: ' + storageProviderName);
         }
-        var preparedTasks = [];
-        this.storage.get().map(function(obj) {
-            preparedTasks.push(new Task(obj['title'], obj['completed']));
-        });
-        this.tasks = preparedTasks;
     }
-    add(task: Task): void{
-        this.tasks.push(task);
-        this.storage.set(this.tasks);
+    get(name) {
+        return this.storage.get(name);
     }
-    getAll(): Task[]{
-        return this.tasks;
+    set(name, value): void {
+        return this.storage.set(name, value);
     }
-    delete(index: number): boolean {
-        if (typeof this.tasks[index] !== 'undefined') {
-            this.tasks.splice(index, 1);
-            this.storage.set(this.tasks);
-            return true;
-        } else {
-            return false;
+    getTasks(): Task[] {
+        var tasks = this.get(this.tasksFieldId);
+        if (!tasks){
+            tasks = '[]';
         }
+        return JSON.parse(tasks);
     }
-    toggleCompleted(index: number): boolean {
-        if (typeof this.tasks[index] !== 'undefined') {
-            this.tasks[index].completed = !this.tasks[index].completed;
-            this.storage.set(this.tasks);
-            return true;
-        } else {
-            return false;
-        }
+    setTasks(tasks: Task[]) {
+        return this.set(this.tasksFieldId, JSON.stringify(tasks));
     }
 }
 
