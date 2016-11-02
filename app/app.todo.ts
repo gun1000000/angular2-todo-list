@@ -3,7 +3,7 @@ import { Task } from './entities/task';
 import { TaskLogic } from './logic/task-logic';
 @Component({
     selector: 'my-app',
-    templateUrl: 'app/templates/todo-form.html',
+    templateUrl: 'templates/todo-form.html',
 })
 
 export class ToDoComponent {

@@ -19,7 +19,7 @@ namespace Providers {
 
 export class AbstractStorageProvider {
     tasksFieldId: string = 'tasks';
-    storage: Providers.StorageProviderInterface;
+    storage: any;
     constructor(private storageProviderName) {
         if (typeof Providers[storageProviderName] !== 'undefined') {
             this.storage = new Providers[storageProviderName]();
