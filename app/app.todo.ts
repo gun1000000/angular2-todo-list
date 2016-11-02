@@ -7,14 +7,17 @@ import { TaskLogic } from './logic/task-logic';
 })
 
 export class ToDoComponent {
-    title: string;
-    edit: boolean;
+    title: string = '';
+    edit: boolean = false;
     logic: TaskLogic;
-
+    providers: string[] = ['LocalStorageProvider', 'CookieStorageProvider']
+    storageProvider: string = 'LocalStorageProvider';
     constructor() {
-        this.title = '';
-        this.edit = false;
-        this.logic = new TaskLogic('LocalStorageProvider');
+        this.initLogic();
+    }
+
+    initLogic() {
+        this.logic = new TaskLogic(this.storageProvider);
     }
 
     /**
@@ -50,5 +53,9 @@ export class ToDoComponent {
      */
     deleteTask(id) {
        this.logic.delete(id);
+    }
+
+    changeProvider() {
+        this.initLogic();
     }
 }

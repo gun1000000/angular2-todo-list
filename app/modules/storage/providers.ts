@@ -15,6 +15,17 @@ namespace Providers {
             return localStorage.setItem(name, value);
         }
     }
+    export class CookieStorageProvider implements StorageProviderInterface {
+        //constructor(private _cookieService:CookieService){}
+        get(name) {
+            return CookieService.get(name);
+        }
+        set(name, value) {
+            var date = new Date();
+            date.setTime(+ date + (365 * 86400000));
+            return CookieService.put(name, value, {expires: date});
+        }
+    }
 }
 
 export class AbstractStorageProvider {

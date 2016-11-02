@@ -5,6 +5,13 @@
         <label for="task">Enter the task description:</label>
         <input [(ngModel)]="title" (keyup.enter)="title=''" type="text" class="form-control" id="task" name="title" placeholder="Short description of your task">
     </div>
+    <label>Select storage:</label>
+    <div *ngFor="let provider of providers">
+        <label>
+            <input type="radio" name="gender" [(ngModel)]="storageProvider" (ngModelChange)="changeProvider(provider)" [value]="provider">
+            {{provider}}
+        </label>
+    </div>
     <button type="submit" class="btn btn-default" [disabled]="title===''">Add</button>
     </form>
 </div>
